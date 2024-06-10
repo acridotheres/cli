@@ -7,3 +7,4 @@ edition = '2021'
 
 [dependencies]
 acridotheres_core = { git = 'https://github.com/acridotheres/core.git', branch = 'main' }
+clap = { version = "4.5.7", features = ["derive"] }
