@@ -7,5 +7,5 @@ pub fn get_version() {
 }
 
 pub fn zip_metadata(path: &str) {
-  println!("metadata {}", corelib::formats::zip::parser::metadata(path).file_count);
+  println!("metadata {}", corelib::formats::zip::parser::metadata(path).file_count); 
 }
