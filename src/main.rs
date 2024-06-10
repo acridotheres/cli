@@ -13,11 +13,17 @@ struct Args {
     /// Output as JSON
     #[arg(short, long)]
     json: bool,
+
+    /// Show archive metadata
+    #[arg(short, long)]
+    metadata: Option<String>,
 }
 
 fn get_command(args: &Args) -> &'static str {
     if args.version {
         "version"
+    } else if args.metadata != None {
+        "metadata"
     } else {
         ""
     }
@@ -30,12 +36,13 @@ fn main() {
 
     if !args.json {
         match command {
-            "version" => text::get_ver(),
+            "version" => text::get_version(),
+            "metadata" => text::zip_metadata(args.metadata.unwrap().as_str()),
             _ => println!("Nothing to do, try --help")
         }
     } else {
         match command {
-            "version" => json::get_ver(),
+            "version" => json::get_version(),
             _ => print!("{{}}\n")
         }
     }

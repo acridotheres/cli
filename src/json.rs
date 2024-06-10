@@ -1,8 +1,8 @@
-use corelib::get_version;
+use corelib;
 
-pub fn get_ver() {
+pub fn get_version() {
   print!("{{\n\t");
   print!("\"cli\": \"v{}\",\n\t", env!("CARGO_PKG_VERSION"));
-  print!("\"core\": \"v{}\"\n", get_version());
+  print!("\"core\": \"v{}\"\n", corelib::get_version());
   print!("}}\n");
 }

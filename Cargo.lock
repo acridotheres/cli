@@ -13,7 +13,7 @@ dependencies = [
 [[package]]
 name = "acridotheres_core"
 version = "0.1.0"
-source = "git+https://github.com/acridotheres/core.git?branch=main#3b3a88a611a8e42169ab4cf3a4d15a3681884ea5"
+source = "git+https://github.com/acridotheres/core.git?branch=main#311b89dd52d5d89c00098961074028b741c9b285"
 
 [[package]]
 name = "anstream"
