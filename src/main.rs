@@ -38,12 +38,12 @@ fn main() {
         match command {
             "version" => text::get_version(),
             "metadata" => text::zip_metadata(args.metadata.unwrap().as_str()),
-            _ => println!("Nothing to do, try --help")
+            _ => println!("Nothing to do, try --help"),
         }
     } else {
         match command {
             "version" => json::get_version(),
-            _ => print!("{{}}\n")
+            _ => print!("{{}}\n"),
         }
     }
 }
