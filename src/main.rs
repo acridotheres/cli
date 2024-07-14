@@ -88,7 +88,13 @@ fn main() {
                 _ => println!("Unknown format"),
             },
             "extract" => match format {
-                "zip" => text::zip_extract(args.input.unwrap().as_str(), args.output.unwrap().as_str(), args.index, args.path, args.all),
+                "zip" => text::zip_extract(
+                    args.input.unwrap().as_str(),
+                    args.output.unwrap().as_str(),
+                    args.index,
+                    args.path,
+                    args.all,
+                ),
                 _ => println!("Unknown format"),
             },
             _ => println!("Nothing to do, try --help"),

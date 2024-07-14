@@ -61,7 +61,10 @@ pub fn zip_list(path: &str) {
                 byte_unit::Byte::from_u64(file.file.size.into())
                     .get_appropriate_unit(byte_unit::UnitType::Decimal)
             );
-            println!("Last modified: {}", file.file.modified.format("%Y-%m-%d %H:%M:%S"));
+            println!(
+                "Last modified: {}",
+                file.file.modified.format("%Y-%m-%d %H:%M:%S")
+            );
             println!("CRC-32 checksum: 0x{:x}", file.checksum);
             println!("Compression method: {}\n", file.compression);
         };
@@ -109,21 +112,27 @@ pub fn zip_extract(input: &str, output: &str, index: Option<u32>, path: Option<S
             let files: Vec<corelib::ZipFileEntry> = metadata
                 .files
                 .iter()
-                .filter_map(|file| if file.file.path.starts_with(&path) { Some(corelib::ZipFileEntry {
-                    file: corelib::FileEntry {
-                        path: file.file.path.clone(),
-                        size: file.file.size,
-                        offset: file.file.offset,
-                        modified: file.file.modified,
-                        is_directory: file.file.is_directory,
-                    },
-                    uncompressed_size: file.uncompressed_size,
-                    checksum: file.checksum,
-                    extra_field: file.extra_field.clone(),
-                    version: file.version,
-                    bit_flag: file.bit_flag,
-                    compression: file.compression,
-                }) } else { None })
+                .filter_map(|file| {
+                    if file.file.path.starts_with(&path) {
+                        Some(corelib::ZipFileEntry {
+                            file: corelib::FileEntry {
+                                path: file.file.path.clone(),
+                                size: file.file.size,
+                                offset: file.file.offset,
+                                modified: file.file.modified,
+                                is_directory: file.file.is_directory,
+                            },
+                            uncompressed_size: file.uncompressed_size,
+                            checksum: file.checksum,
+                            extra_field: file.extra_field.clone(),
+                            version: file.version,
+                            bit_flag: file.bit_flag,
+                            compression: file.compression,
+                        })
+                    } else {
+                        None
+                    }
+                })
                 .collect();
             corelib::formats::zip::parser::extract(&mut file, &files, 1024, &|path| {
                 format!("{}/{}", output, path)
