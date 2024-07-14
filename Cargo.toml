@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 acridotheres_core = { git = "https://github.com/acridotheres/core.git", branch = "main" }
+byte-unit = { version = "5.1.4", features = ["u128"] }
 clap = { version = "4.5.7", features = ["derive"] }
