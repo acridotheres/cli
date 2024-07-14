@@ -7,8 +7,10 @@ pub fn get_version() {
 }
 
 pub fn zip_metadata(path: &str) {
+    let mut file = corelib::FileReader::new(path);
+
     println!(
-        "metadata {}",
-        corelib::formats::zip::parser::metadata(path).file_count
+        "metadata {:?}",
+        corelib::formats::zip::parser::metadata(&mut file)
     );
 }

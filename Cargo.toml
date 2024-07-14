@@ -1,10 +1,10 @@
 [package]
-name = 'acridotheres_cli'
-version = '0.1.0'
-edition = '2021'
+name = "acridotheres_cli"
+version = "0.1.0"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-acridotheres_core = { git = 'https://github.com/acridotheres/core.git', branch = 'main' }
+acridotheres_core = { git = "https://github.com/acridotheres/core.git", branch = "main" }
 clap = { version = "4.5.7", features = ["derive"] }
