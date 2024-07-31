@@ -72,7 +72,13 @@ pub fn zip_list(path: String) {
     }
 }
 
-pub fn zip_extract(input: String, output: String, index: Option<u32>, path: Option<String>, all: bool) {
+pub fn zip_extract(
+    input: String,
+    output: String,
+    index: Option<u32>,
+    path: Option<String>,
+    all: bool,
+) {
     let mut file = corelib::FileReader::new(&input);
     std::fs::create_dir_all(&output).unwrap();
 
