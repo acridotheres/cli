@@ -6,6 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-acridotheres_core = { git = "https://github.com/acridotheres/core.git", branch = "main" }
+acridotheres_core = { git = "https://github.com/acridotheres/core.git", tag="v0.1.1" }
 byte-unit = { version = "5.1.4", features = ["u128"] }
 clap = { version = "4.5.7", features = ["derive"] }
