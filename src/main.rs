@@ -80,17 +80,17 @@ fn main() {
         match command {
             "version" => text::get_version(),
             "metadata" => match format {
-                "zip" => text::zip_metadata(args.input.unwrap().as_str()),
+                "zip" => text::zip_metadata(args.input.unwrap()),
                 _ => println!("Unknown format"),
             },
             "list" => match format {
-                "zip" => text::zip_list(args.input.unwrap().as_str()),
+                "zip" => text::zip_list(args.input.unwrap()),
                 _ => println!("Unknown format"),
             },
             "extract" => match format {
                 "zip" => text::zip_extract(
-                    args.input.unwrap().as_str(),
-                    args.output.unwrap().as_str(),
+                    args.input.unwrap(),
+                    args.output.unwrap(),
                     args.index,
                     args.path,
                     args.all,

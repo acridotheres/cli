@@ -7,8 +7,8 @@ pub fn get_version() {
     println!("core v{}", corelib::get_version());
 }
 
-pub fn zip_metadata(path: &str) {
-    let mut file = corelib::FileReader::new(path);
+pub fn zip_metadata(path: String) {
+    let mut file = corelib::FileReader::new(&path);
 
     let metadata = corelib::formats::zip::parser::metadata(&mut file);
 
@@ -40,8 +40,8 @@ pub fn zip_metadata(path: &str) {
     println!("Total size (compressed): {}", total_size);
 }
 
-pub fn zip_list(path: &str) {
-    let mut file = corelib::FileReader::new(path);
+pub fn zip_list(path: String) {
+    let mut file = corelib::FileReader::new(&path);
 
     let metadata = corelib::formats::zip::parser::metadata(&mut file);
 
@@ -72,15 +72,15 @@ pub fn zip_list(path: &str) {
     }
 }
 
-pub fn zip_extract(input: &str, output: &str, index: Option<u32>, path: Option<String>, all: bool) {
-    let mut file = corelib::FileReader::new(input);
-    std::fs::create_dir_all(output).unwrap();
+pub fn zip_extract(input: String, output: String, index: Option<u32>, path: Option<String>, all: bool) {
+    let mut file = corelib::FileReader::new(&input);
+    std::fs::create_dir_all(&output).unwrap();
 
     let metadata = corelib::formats::zip::parser::metadata(&mut file);
 
     if all {
-        corelib::formats::zip::parser::extract(&mut file, &metadata.files, 1024, &|path| {
-            format!("{}/{}", output, path)
+        corelib::formats::zip::parser::extract(&mut file, &metadata.files, &1024, &|path| {
+            format!("{}/{}", &output, &path)
         });
     } else {
         if index != None {
@@ -104,8 +104,8 @@ pub fn zip_extract(input: &str, output: &str, index: Option<u32>, path: Option<S
                 bit_flag: metadata.files[index as usize].bit_flag,
                 compression: metadata.files[index as usize].compression,
             }];
-            corelib::formats::zip::parser::extract(&mut file, files, 1024, &|path| {
-                format!("{}/{}", output, path)
+            corelib::formats::zip::parser::extract(&mut file, files, &1024, &|path| {
+                format!("{}/{}", &output, &path)
             });
         } else {
             let path = path.unwrap();
@@ -134,8 +134,8 @@ pub fn zip_extract(input: &str, output: &str, index: Option<u32>, path: Option<S
                     }
                 })
                 .collect();
-            corelib::formats::zip::parser::extract(&mut file, &files, 1024, &|path| {
-                format!("{}/{}", output, path)
+            corelib::formats::zip::parser::extract(&mut file, &files, &1024, &|path| {
+                format!("{}/{}", &output, &path)
             });
         }
     };
