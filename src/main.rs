@@ -1,4 +1,5 @@
-mod text;
+//mod text;
+mod commands;
 
 use clap::Parser;
 
@@ -44,6 +45,14 @@ struct Args {
     /// "all" (combine with -x or similar)
     #[arg(short, long)]
     all: bool,
+
+    /// Skip integrity checks (not recommended, faster)
+    #[arg(long, default_value = "false")]
+    skip_integrity_checks: bool,
+
+    /// Buffer size for file operations in bytes
+    #[arg(long, default_value = "16777216")]
+    buffer: u64,
 }
 
 fn get_command(args: &Args) -> &'static str {
@@ -65,32 +74,30 @@ fn main() {
 
     let command = get_command(&args);
 
-    let format = args.input_type.unwrap_or_else(|| {
-        // add format detection here
-        "".to_string()
-    });
-    let format = format.as_str();
-
     match command {
-        "version" => text::get_version(),
-        "metadata" => match format {
-            "zip" => text::zip_metadata(args.input.unwrap()),
-            _ => println!("Unknown format"),
-        },
-        "list" => match format {
-            "zip" => text::zip_list(args.input.unwrap()),
-            _ => println!("Unknown format"),
-        },
-        "extract" => match format {
-            "zip" => text::zip_extract(
-                args.input.unwrap(),
-                args.output.unwrap(),
-                args.index,
-                args.path,
-                args.all,
-            ),
-            _ => println!("Unknown format"),
-        },
+        "version" => commands::version::version(),
+        "metadata" => commands::metadata::metadata(
+            args.input_type.unwrap(),
+            args.input.unwrap(),
+            !args.skip_integrity_checks,
+            args.buffer,
+        ),
+        "list" => commands::list::list(
+            args.input_type.unwrap(),
+            args.input.unwrap(),
+            !args.skip_integrity_checks,
+            args.buffer,
+        ),
+        "extract" => commands::extract::extract(
+            args.input_type.unwrap(),
+            args.input.unwrap(),
+            args.output.unwrap(),
+            args.index,
+            args.path,
+            args.all,
+            !args.skip_integrity_checks,
+            args.buffer,
+        ),
         _ => println!("Nothing to do, try --help"),
     }
 }
