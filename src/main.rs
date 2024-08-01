@@ -1,4 +1,3 @@
-mod json;
 mod text;
 
 use clap::Parser;
@@ -9,10 +8,6 @@ struct Args {
     /// Show current version
     #[arg(short, long)]
     version: bool,
-
-    /// Output as JSON
-    #[arg(short, long)]
-    json: bool,
 
     /// Show archive metadata
     #[arg(short, long)]
@@ -76,33 +71,26 @@ fn main() {
     });
     let format = format.as_str();
 
-    if !args.json {
-        match command {
-            "version" => text::get_version(),
-            "metadata" => match format {
-                "zip" => text::zip_metadata(args.input.unwrap()),
-                _ => println!("Unknown format"),
-            },
-            "list" => match format {
-                "zip" => text::zip_list(args.input.unwrap()),
-                _ => println!("Unknown format"),
-            },
-            "extract" => match format {
-                "zip" => text::zip_extract(
-                    args.input.unwrap(),
-                    args.output.unwrap(),
-                    args.index,
-                    args.path,
-                    args.all,
-                ),
-                _ => println!("Unknown format"),
-            },
-            _ => println!("Nothing to do, try --help"),
-        }
-    } else {
-        match command {
-            "version" => json::get_version(),
-            _ => print!("{{}}\n"),
-        }
+    match command {
+        "version" => text::get_version(),
+        "metadata" => match format {
+            "zip" => text::zip_metadata(args.input.unwrap()),
+            _ => println!("Unknown format"),
+        },
+        "list" => match format {
+            "zip" => text::zip_list(args.input.unwrap()),
+            _ => println!("Unknown format"),
+        },
+        "extract" => match format {
+            "zip" => text::zip_extract(
+                args.input.unwrap(),
+                args.output.unwrap(),
+                args.index,
+                args.path,
+                args.all,
+            ),
+            _ => println!("Unknown format"),
+        },
+        _ => println!("Nothing to do, try --help"),
     }
 }
