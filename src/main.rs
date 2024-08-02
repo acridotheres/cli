@@ -1,4 +1,5 @@
-//mod text;
+#![allow(clippy::too_many_arguments)]
+
 mod commands;
 
 use clap::Parser;

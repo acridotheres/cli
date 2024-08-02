@@ -9,9 +9,7 @@ pub fn metadata(format_string: String, input: String, check_integrity: bool, buf
 
     match format {
         Formats::Zip => {
-            let metadata = match *metadata {
-                OriginalArchiveMetadata::Zip(metadata) => metadata,
-            };
+            let OriginalArchiveMetadata::Zip(metadata) = *metadata;
 
             println!("Type: {}", format_string);
             let mut file_count: u32 = 0;
@@ -36,7 +34,7 @@ pub fn metadata(format_string: String, input: String, check_integrity: bool, buf
             for file in &metadata.files {
                 total_size += file.size;
             }
-            let total_size = byte_unit::Byte::from_u64(total_size.into())
+            let total_size = byte_unit::Byte::from_u64(total_size)
                 .get_appropriate_unit(byte_unit::UnitType::Decimal);
             println!("Total size (compressed): {}", total_size);
         }

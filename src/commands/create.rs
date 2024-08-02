@@ -9,13 +9,10 @@ pub fn create(format: String, input: String, output: String, buffer_size: u64) {
         .split(';')
         .map(|file| {
             let file = file.split(':').collect::<Vec<&str>>();
-            let source_path = file.get(0).unwrap();
+            let source_path = file.first().unwrap();
             let mut target_path = source_path;
-            match file.get(1) {
-                Some(path) => {
-                    target_path = path;
-                }
-                None => {}
+            if let Some(path) = file.get(1) {
+                target_path = path;
             }
             EntrySource {
                 path: target_path.to_string(),

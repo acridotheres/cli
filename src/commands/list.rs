@@ -9,13 +9,10 @@ pub fn list(format_string: String, input: String, check_integrity: bool, buffer_
 
     match format {
         Formats::Zip => {
-            let metadata = match *metadata {
-                OriginalArchiveMetadata::Zip(metadata) => metadata,
-            };
+            let OriginalArchiveMetadata::Zip(metadata) = *metadata;
 
-            let mut i: u32 = 0;
-            println!("");
-            for file in &metadata.files {
+            println!();
+            for (i, file) in (0_u32..).zip(metadata.files.iter()) {
                 println!("{}", file.path);
                 println!("{}", "=".repeat(file.path.len()));
                 println!("Index: {}", i);
@@ -26,7 +23,7 @@ pub fn list(format_string: String, input: String, check_integrity: bool, buffer_
                         "Size: {} ({} compressed)",
                         byte_unit::Byte::from_u64(file.uncompressed_size.into())
                             .get_appropriate_unit(byte_unit::UnitType::Decimal),
-                        byte_unit::Byte::from_u64(file.size.into())
+                        byte_unit::Byte::from_u64(file.size)
                             .get_appropriate_unit(byte_unit::UnitType::Decimal)
                     );
                     println!(
@@ -36,7 +33,6 @@ pub fn list(format_string: String, input: String, check_integrity: bool, buffer_
                     println!("CRC-32 checksum: 0x{:x}", file.checksum);
                     println!("Compression method: {}\n", file.compression);
                 };
-                i += 1;
             }
         }
     }
