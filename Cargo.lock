@@ -13,8 +13,8 @@ dependencies = [
 
 [[package]]
 name = "acridotheres_core"
-version = "0.1.1"
-source = "git+https://github.com/acridotheres/core.git?tag=v0.2.0#92b0704484fa38735249168fc6f23bfca066c3e1"
+version = "0.2.1"
+source = "git+https://github.com/acridotheres/core.git?tag=v0.2.1#b1525971fa4577d0351f59cc5bd33b66d5e0d93f"
 dependencies = [
  "chrono",
  "crc32fast",
