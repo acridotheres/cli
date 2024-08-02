@@ -18,7 +18,7 @@ struct Args {
     #[arg(short = 't', long = "type")]
     input_type: Option<String>,
 
-    /// Path to input file
+    /// Path to input file (if creating, multiple files can be separated by semicolons)
     #[arg(short, long)]
     input: Option<String>,
 
@@ -33,6 +33,10 @@ struct Args {
     /// Extract files from archive
     #[arg(short = 'x', long = "extract")]
     extract: bool,
+
+    /// Create archive
+    #[arg(short, long)]
+    create: bool,
 
     /// by path
     #[arg(short = 'p', long = "path", value_name = "PATH")]
@@ -64,6 +68,8 @@ fn get_command(args: &Args) -> &'static str {
         "list"
     } else if args.extract {
         "extract"
+    } else if args.create {
+        "create"
     } else {
         ""
     }
@@ -96,6 +102,12 @@ fn main() {
             args.path,
             args.all,
             !args.skip_integrity_checks,
+            args.buffer,
+        ),
+        "create" => commands::create::create(
+            args.input_type.unwrap(),
+            args.input.unwrap(),
+            args.output.unwrap(),
             args.buffer,
         ),
         _ => println!("Nothing to do, try --help"),
