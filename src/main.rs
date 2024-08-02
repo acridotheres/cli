@@ -1,5 +1,6 @@
-mod json;
-mod text;
+#![allow(clippy::too_many_arguments)]
+
+mod commands;
 
 use clap::Parser;
 
@@ -10,10 +11,6 @@ struct Args {
     #[arg(short, long)]
     version: bool,
 
-    /// Output as JSON
-    #[arg(short, long)]
-    json: bool,
-
     /// Show archive metadata
     #[arg(short, long)]
     metadata: bool,
@@ -22,7 +19,7 @@ struct Args {
     #[arg(short = 't', long = "type")]
     input_type: Option<String>,
 
-    /// Path to input file
+    /// Path to input file (if creating, multiple files can be separated by semicolons)
     #[arg(short, long)]
     input: Option<String>,
 
@@ -38,6 +35,10 @@ struct Args {
     #[arg(short = 'x', long = "extract")]
     extract: bool,
 
+    /// Create archive
+    #[arg(short, long)]
+    create: bool,
+
     /// by path
     #[arg(short = 'p', long = "path", value_name = "PATH")]
     path: Option<String>,
@@ -49,6 +50,14 @@ struct Args {
     /// "all" (combine with -x or similar)
     #[arg(short, long)]
     all: bool,
+
+    /// Skip integrity checks (not recommended, faster)
+    #[arg(long, default_value = "false")]
+    skip_integrity_checks: bool,
+
+    /// Buffer size for file operations in bytes
+    #[arg(long, default_value = "16777216")]
+    buffer: u64,
 }
 
 fn get_command(args: &Args) -> &'static str {
@@ -60,6 +69,8 @@ fn get_command(args: &Args) -> &'static str {
         "list"
     } else if args.extract {
         "extract"
+    } else if args.create {
+        "create"
     } else {
         ""
     }
@@ -70,39 +81,36 @@ fn main() {
 
     let command = get_command(&args);
 
-    let format = args.input_type.unwrap_or_else(|| {
-        // add format detection here
-        "".to_string()
-    });
-    let format = format.as_str();
-
-    if !args.json {
-        match command {
-            "version" => text::get_version(),
-            "metadata" => match format {
-                "zip" => text::zip_metadata(args.input.unwrap()),
-                _ => println!("Unknown format"),
-            },
-            "list" => match format {
-                "zip" => text::zip_list(args.input.unwrap()),
-                _ => println!("Unknown format"),
-            },
-            "extract" => match format {
-                "zip" => text::zip_extract(
-                    args.input.unwrap(),
-                    args.output.unwrap(),
-                    args.index,
-                    args.path,
-                    args.all,
-                ),
-                _ => println!("Unknown format"),
-            },
-            _ => println!("Nothing to do, try --help"),
-        }
-    } else {
-        match command {
-            "version" => json::get_version(),
-            _ => print!("{{}}\n"),
-        }
+    match command {
+        "version" => commands::version::version(),
+        "metadata" => commands::metadata::metadata(
+            args.input_type.unwrap(),
+            args.input.unwrap(),
+            !args.skip_integrity_checks,
+            args.buffer,
+        ),
+        "list" => commands::list::list(
+            args.input_type.unwrap(),
+            args.input.unwrap(),
+            !args.skip_integrity_checks,
+            args.buffer,
+        ),
+        "extract" => commands::extract::extract(
+            args.input_type.unwrap(),
+            args.input.unwrap(),
+            args.output.unwrap(),
+            args.index,
+            args.path,
+            args.all,
+            !args.skip_integrity_checks,
+            args.buffer,
+        ),
+        "create" => commands::create::create(
+            args.input_type.unwrap(),
+            args.input.unwrap(),
+            args.output.unwrap(),
+            args.buffer,
+        ),
+        _ => println!("Nothing to do, try --help"),
     }
 }
