@@ -1,23 +1,15 @@
-use corelib::{archive, formats};
+use std::path::Path;
 
-pub fn extract(
-    format: String,
-    input: String,
-    output: String,
-    index: Option<u32>,
-    path: Option<String>,
-    all: bool,
-    check_integrity: bool,
-    buffer_size: u64,
-) {
-    archive::extract(
-        formats::from_string(&format),
-        input,
-        output,
-        index,
-        path,
-        all,
-        check_integrity,
+use acridotheres::{archive::extract::extract_all, formats::Format};
+
+pub fn run(file: String, output: Option<String>, format: Option<String>, buffer_size: u64) {
+    let output = output.unwrap_or_else(|| file.clone().split('.').next().unwrap().to_string());
+    let format = format.unwrap_or_else(|| "auto".to_string());
+
+    extract_all(
+        Path::new(&file),
+        Path::new(&output),
+        Format::Zip,
         buffer_size,
     )
     .unwrap();
