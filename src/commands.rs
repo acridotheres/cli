@@ -26,6 +26,10 @@ pub enum Command {
         /// Method to use for autodetection (extension, magic, parse)
         #[arg(short = 'm', long, default_value = "extension")]
         autodetection_method: String,
+
+        /// Password for the archive
+        #[arg(short = 'P', long)]
+        password: Option<String>,
     },
 }
 
@@ -39,8 +43,16 @@ impl Command {
                 format,
                 buffer_size,
                 autodetection_method,
+                password,
             } => {
-                extract::run(file, output, format, buffer_size, autodetection_method);
+                extract::run(
+                    file,
+                    output,
+                    format,
+                    buffer_size,
+                    autodetection_method,
+                    password,
+                );
             }
         }
     }

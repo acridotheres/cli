@@ -14,6 +14,7 @@ pub fn run(
     format: Option<String>,
     buffer_size: u64,
     autodetection_method: String,
+    password: Option<String>,
 ) {
     let output = output.unwrap_or_else(|| file.clone().split('.').next().unwrap().to_string());
     let format_arg = format.clone();
@@ -43,5 +44,12 @@ pub fn run(
         Format::auto(Path::new(&file), &mut reader, &method).unwrap()
     });
 
-    extract_all(Path::new(&file), Path::new(&output), format, buffer_size).unwrap();
+    extract_all(
+        Path::new(&file),
+        Path::new(&output),
+        format,
+        buffer_size,
+        password.as_deref(),
+    )
+    .unwrap();
 }
